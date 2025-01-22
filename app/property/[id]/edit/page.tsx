@@ -22,13 +22,14 @@ interface Property {
   bathrooms?: number;
 }
 
-interface PageProps {
+type Props = {
   params: {
     id: string;
   };
-}
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-export default function EditPropertyPage({ params }: PageProps) {
+export default function EditPropertyPage({ params, searchParams }: Props) {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
