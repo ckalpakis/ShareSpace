@@ -13,7 +13,8 @@ interface Property {
   image_urls: string[];
   bedrooms?: number;
   bathrooms?: number;
-  available_from?: string;
+  available_from: string;
+  available_until: string | null;
 }
 
 export default function PropertyListings() {
@@ -74,16 +75,13 @@ export default function PropertyListings() {
       {properties.map((property) => (
         <PropertyCard
           key={property.id}
-          id={property.id}
-          title={property.title}
-          description={property.description}
-          price={property.price}
-          location={property.location}
-          imageUrl={property.image_urls?.[0] || null}
-          imageUrls={property.image_urls?.slice(1) || []}
+          {...property}
+          imageUrl={property.image_urls[0] || null}
+          imageUrls={property.image_urls.slice(1)}
           bedrooms={property.bedrooms}
           bathrooms={property.bathrooms}
-          availableFrom={property.available_from}
+          available_from={property.available_from || new Date().toISOString()}
+          available_until={property.available_until || null}
         />
       ))}
     </div>

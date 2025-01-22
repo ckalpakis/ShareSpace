@@ -20,6 +20,7 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  Trash2,
 } from "lucide-react";
 
 interface PropertyCardProps {
@@ -29,10 +30,13 @@ interface PropertyCardProps {
   price: number;
   location: string;
   imageUrl: string | null;
-  imageUrls?: string[];
+  imageUrls: string[];
+  available_from: string;
+  available_until: string | null;
+  onDelete?: () => void;
+  showActions?: boolean;
   bedrooms?: number;
   bathrooms?: number;
-  availableFrom?: string;
 }
 
 export default function PropertyCard({
@@ -42,10 +46,13 @@ export default function PropertyCard({
   price,
   location,
   imageUrl,
-  imageUrls = [],
+  imageUrls,
+  available_from,
+  available_until,
+  onDelete,
+  showActions,
   bedrooms,
   bathrooms,
-  availableFrom,
 }: PropertyCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showControls, setShowControls] = useState(false);
@@ -149,18 +156,20 @@ export default function PropertyCard({
             )}
           </div>
 
-          <CardHeader className="space-y-2">
-            <CardTitle className="text-xl line-clamp-1">{title}</CardTitle>
+          <CardHeader className="space-y-2 p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl line-clamp-1">
+              {title}
+            </CardTitle>
             <div className="flex items-center text-gray-600 text-sm">
-              <MapPin className="h-4 w-4 mr-1" />
-              {location}
+              <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
+              <span className="line-clamp-1">{location}</span>
             </div>
-            <div className="flex items-center text-lg font-semibold text-primary">
-              <DollarSign className="h-5 w-5" />
+            <div className="flex items-center text-base sm:text-lg font-semibold text-primary">
+              <DollarSign className="h-5 w-5 flex-shrink-0" />
               {price.toLocaleString()}/month
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6">
             <div className="flex gap-4 mb-3 text-gray-600">
               {typeof bedrooms === "number" && (
                 <div className="flex items-center">
@@ -174,22 +183,41 @@ export default function PropertyCard({
                   <span className="text-sm">{bathrooms} bath</span>
                 </div>
               )}
-              {availableFrom && (
+              {available_from && (
                 <div className="flex items-center">
                   <Calendar className="h-4 w-4 mr-1" />
                   <span className="text-sm">
-                    Available {formatDate(availableFrom)}
+                    Available {formatDate(available_from)}
                   </span>
                 </div>
               )}
             </div>
             <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
           </CardContent>
-          <CardFooter>
-            <Button variant="secondary" className="w-full">
-              View Details
-            </Button>
-          </CardFooter>
+          <div className="px-4 py-3 border-t border-gray-100">
+            <div className="flex items-center justify-between">
+              <Link
+                href={`/property/${id}`}
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center"
+              >
+                View Details
+              </Link>
+              {showActions && onDelete && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onDelete();
+                  }}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  <Trash2 className="w-4 h-4 mr-1.5" />
+                  Delete
+                </Button>
+              )}
+            </div>
+          </div>
         </Card>
       </Link>
     </motion.div>

@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/app/providers";
 import PropertyCard from "@/components/property-card";
 import { Button } from "./ui/button";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface Property {
   id: string;
@@ -23,18 +25,16 @@ export default function ActiveListings() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchProperties();
-  }, []);
+  }, [user]);
 
   const fetchProperties = async () => {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
+    if (!user) return;
 
+    try {
       const { data, error } = await supabase
         .from("properties")
         .select("*")
@@ -47,6 +47,22 @@ export default function ActiveListings() {
       console.error("Error fetching properties:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this listing?")) return;
+
+    try {
+      const { error } = await supabase.from("properties").delete().eq("id", id);
+
+      if (error) throw error;
+
+      setProperties((prev) => prev.filter((property) => property.id !== id));
+      toast.success("Listing deleted successfully");
+    } catch (error) {
+      console.error("Error deleting listing:", error);
+      toast.error("Failed to delete listing");
     }
   };
 
@@ -75,6 +91,8 @@ export default function ActiveListings() {
             {...property}
             imageUrl={property.image_urls[0] || null}
             imageUrls={property.image_urls.slice(1)}
+            onDelete={() => handleDelete(property.id)}
+            showActions={true}
           />
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <Button

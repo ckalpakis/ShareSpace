@@ -114,12 +114,12 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="space-y-6"
+            className="space-y-4"
           >
             {/* Profile Section */}
-            <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-900 flex items-center gap-2">
-                <User className="w-6 h-6 text-blue-600" />
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-100">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-900 flex items-center gap-2">
+                <User className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                 Profile Information
               </h2>
               <div className="space-y-4">
@@ -141,14 +141,9 @@ export default function DashboardPage() {
                         className="max-w-md"
                       />
                     </div>
-                    <div className="flex gap-2 pt-2">
-                      <Button onClick={handleUpdateProfile}>
-                        Save Changes
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsEditing(false)}
-                      >
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                      <Button className="w-full sm:w-auto">Save Changes</Button>
+                      <Button variant="outline" className="w-full sm:w-auto">
                         Cancel
                       </Button>
                     </div>
@@ -177,7 +172,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Account Actions */}
-            <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
               <h2 className="text-2xl font-semibold mb-6 text-gray-900 flex items-center gap-2">
                 <Key className="w-6 h-6 text-blue-600" />
                 Account Actions

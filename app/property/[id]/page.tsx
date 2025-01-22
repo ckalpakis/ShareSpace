@@ -2,6 +2,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import PropertyDetails from "@/components/property-details";
 import { notFound } from "next/navigation";
+import { PageContainer } from "@/components/page-container";
 
 export default async function PropertyPage({
   params,
@@ -52,7 +53,13 @@ export default async function PropertyPage({
 
     console.log("Found and formatted property:", formattedProperty);
 
-    return <PropertyDetails initialData={formattedProperty} />;
+    return (
+      <PageContainer variant="property">
+        <div className="max-w-4xl mx-auto">
+          <PropertyDetails initialData={formattedProperty} />
+        </div>
+      </PageContainer>
+    );
   } catch (error) {
     console.error("Unexpected error:", error);
     return notFound();

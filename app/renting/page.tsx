@@ -37,7 +37,7 @@ export default function RentingPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-white">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-8 pt-24">
+      <main className="flex-grow container mx-auto px-4 py-8 pt-16">
         <Suspense fallback={<LoadingSkeleton />}>
           <RentingClient />
         </Suspense>

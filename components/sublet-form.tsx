@@ -197,39 +197,27 @@ export default function SubletForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="title">Title</Label>
-        <Input
-          id="title"
-          required
-          placeholder="e.g., Cozy Studio in Downtown"
-          value={formData.title}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, title: e.target.value }))
-          }
-        />
-      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <div className="col-span-1 sm:col-span-2">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            className="mt-1"
+            required
+            placeholder="e.g., Cozy Studio in Downtown"
+            value={formData.title}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, title: e.target.value }))
+            }
+          />
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea
-          id="description"
-          required
-          placeholder="Describe your space..."
-          value={formData.description}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, description: e.target.value }))
-          }
-          className="h-32"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <Label htmlFor="price">Monthly Rent ($)</Label>
+        <div className="col-span-1">
+          <Label htmlFor="price">Price per month</Label>
           <Input
             id="price"
             type="number"
+            className="mt-1"
             required
             placeholder="2000"
             value={formData.price}
@@ -239,7 +227,21 @@ export default function SubletForm({
           />
         </div>
 
-        <div className="space-y-4">
+        <div className="col-span-1 sm:col-span-2">
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            required
+            placeholder="Describe your space..."
+            value={formData.description}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, description: e.target.value }))
+            }
+            className="h-32"
+          />
+        </div>
+
+        <div className="col-span-1 sm:col-span-2">
           <Label>State College Address</Label>
 
           <div className="space-y-2">
@@ -313,10 +315,8 @@ export default function SubletForm({
             Enter your complete State College address
           </p>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
+        <div className="col-span-1 sm:col-span-2">
           <Label htmlFor="bedrooms">Bedrooms</Label>
           <Input
             id="bedrooms"
@@ -331,7 +331,7 @@ export default function SubletForm({
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="col-span-1 sm:col-span-2">
           <Label htmlFor="bathrooms">Bathrooms</Label>
           <Input
             id="bathrooms"
@@ -346,10 +346,8 @@ export default function SubletForm({
             }
           />
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
+        <div className="col-span-1 sm:col-span-2">
           <Label htmlFor="availableFrom">Available From</Label>
           <Input
             id="availableFrom"
@@ -366,7 +364,7 @@ export default function SubletForm({
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="col-span-1 sm:col-span-2">
           <Label htmlFor="availableUntil">Available Until (Optional)</Label>
           <Input
             id="availableUntil"
@@ -383,57 +381,71 @@ export default function SubletForm({
             }
           />
         </div>
-      </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="images">Photos</Label>
-        <Input
-          id="images"
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={handleImageChange}
-          className="cursor-pointer"
-        />
-        <p className="text-sm text-gray-500">
-          Upload up to 10 photos of your space (Required)
-        </p>
-      </div>
-
-      {/* Show existing images with remove option */}
-      {formData.existingImages.length > 0 && (
-        <div className="space-y-2">
-          <Label>Current Images</Label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {formData.existingImages.map((url, index) => (
-              <div key={url} className="relative group">
-                <img
-                  src={url}
-                  alt={`Property ${index + 1}`}
-                  className="w-full h-32 object-cover rounded-lg"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeExistingImage(index)}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
+        <div className="col-span-1 sm:col-span-2">
+          <Label htmlFor="images">Photos</Label>
+          <Input
+            id="images"
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+            className="cursor-pointer"
+          />
+          <p className="text-sm text-gray-500">
+            Upload up to 10 photos of your space (Required)
+          </p>
         </div>
-      )}
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting
-          ? mode === "edit"
-            ? "Updating..."
-            : "Creating Listing..."
-          : mode === "edit"
-          ? "Update Property"
-          : "List Your Space"}
-      </Button>
+        {/* Show existing images with remove option */}
+        {formData.existingImages.length > 0 && (
+          <div className="col-span-1 sm:col-span-2 space-y-2">
+            <Label>Current Images</Label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {formData.existingImages.map((url, index) => (
+                <div key={url} className="relative group">
+                  <img
+                    src={url}
+                    alt={`Property ${index + 1}`}
+                    className="w-full h-32 object-cover rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeExistingImage(index)}
+                    className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+        <Button
+          type="submit"
+          className="w-full sm:w-auto"
+          disabled={isSubmitting}
+        >
+          {isSubmitting
+            ? mode === "edit"
+              ? "Updating..."
+              : "Creating Listing..."
+            : mode === "edit"
+            ? "Update Property"
+            : "List Your Space"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.back()}
+          className="w-full sm:w-auto"
+        >
+          Cancel
+        </Button>
+      </div>
     </form>
   );
 }

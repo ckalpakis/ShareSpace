@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import SubletForm from "@/components/sublet-form";
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { PageContainer } from "@/components/page-container";
 
 interface Property {
   id: string;
@@ -76,15 +77,16 @@ export default function EditPropertyPage({
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Edit Your Listing</h1>
-        <div className="max-w-2xl mx-auto">
-          <SubletForm initialData={property} mode="edit" />
+    <PageContainer variant="property">
+      <div className="max-w-2xl mx-auto space-y-6 pt-8">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <h1 className="text-3xl font-bold">Edit Your Listing</h1>
+          <p className="text-gray-600 mt-2">
+            Update the details of your property listing
+          </p>
         </div>
-      </main>
-      <Footer />
-    </div>
+        <SubletForm initialData={property} mode="edit" />
+      </div>
+    </PageContainer>
   );
 }
