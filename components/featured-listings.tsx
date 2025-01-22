@@ -107,6 +107,7 @@ export default function FeaturedListings() {
                 price={property.price}
                 location={property.location}
                 imageUrl={property.image_urls?.[0] || null}
+                imageUrls={property.image_urls?.slice(1) || []}
               />
             </motion.div>
           ))}

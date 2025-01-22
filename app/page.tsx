@@ -5,6 +5,7 @@ import Hero from "@/components/hero";
 import FeaturedListings from "@/components/featured-listings";
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import WhySubleaseSection from "@/components/why-sublease";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-grow">
         <Hero />
+        <WhySubleaseSection />
         <FeaturedListings />
       </main>
       <Footer />
