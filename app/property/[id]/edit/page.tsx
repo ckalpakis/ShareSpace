@@ -3,20 +3,23 @@ import EditPropertyClient from "./edit-client";
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
-type PageProps = {
-  params: {
-    id: string;
-  };
-  searchParams: Record<string, string | string[] | undefined>;
+interface Props {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export const metadata = {
+  title: "Edit Property",
+  description: "Edit your property listing",
 };
 
-async function EditPropertyPage(props: PageProps) {
+export default async function EditPropertyPage({ params }: Props) {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-8">
         <Suspense fallback={<LoadingSkeleton />}>
-          <EditPropertyClient id={props.params.id} />
+          <EditPropertyClient id={params.id} />
         </Suspense>
       </main>
       <Footer />
@@ -32,5 +35,3 @@ function LoadingSkeleton() {
     </div>
   );
 }
-
-export default EditPropertyPage;
