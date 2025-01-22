@@ -8,36 +8,67 @@ import { Footer } from "@/components/footer";
 import SubletForm from "@/components/sublet-form";
 import { useAuth } from "@/app/providers";
 
-interface PageParams {
-  params: { id: string };
+interface Property {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  image_urls: string[];
+  available_from?: string;
+  available_until?: string;
+  owner_id: string;
+  bedrooms?: number;
+  bathrooms?: number;
 }
 
-export default function EditPropertyPage({ params }: PageParams) {
-  const [property, setProperty] = useState(null);
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function EditPropertyPage({ params }: PageProps) {
+  const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) {
+          router.push("/auth");
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from("properties")
+          .select("*")
+          .eq("id", params.id)
+          .single();
+
+        if (error) throw error;
+
+        // Verify ownership
+        if (data.owner_id !== user.id) {
+          router.push("/subletting");
+          return;
+        }
+
+        setProperty(data);
+      } catch (error) {
+        console.error("Error:", error);
+        router.push("/subletting");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProperty();
-  }, []);
-
-  const fetchProperty = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("properties")
-        .select("*")
-        .eq("id", params.id)
-        .single();
-
-      if (error) throw error;
-      setProperty(data);
-    } catch (error) {
-      console.error("Error:", error);
-      router.push("/subletting");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [params.id, router]);
 
   if (loading) {
     return (
@@ -54,12 +85,18 @@ export default function EditPropertyPage({ params }: PageParams) {
     );
   }
 
+  if (!property) {
+    return <div>Property not found</div>;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Edit Property</h1>
-        <SubletForm initialData={property} mode="edit" />
+        <h1 className="text-3xl font-bold mb-8">Edit Your Listing</h1>
+        <div className="max-w-2xl mx-auto">
+          <SubletForm initialData={property} mode="edit" />
+        </div>
       </main>
       <Footer />
     </div>
